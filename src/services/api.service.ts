@@ -4,14 +4,16 @@
  */
 
 import { ApiError } from "@/types";
+import { ENV_CONFIG } from "@/config/env.config";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+const API_BASE_URL = ENV_CONFIG.API_URL;
 
 class ApiService {
   private baseUrl: string;
 
   constructor() {
-    this.baseUrl = API_BASE_URL;
+    // Eliminar barra final si existe para evitar URLs con doble barra
+    this.baseUrl = API_BASE_URL.replace(/\/+$/, '');
   }
 
   /**
