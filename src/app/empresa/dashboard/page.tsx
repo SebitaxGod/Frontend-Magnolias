@@ -103,7 +103,17 @@ export default function DashboardEmpresaPage() {
 
       if (response.ok) {
         const data = await response.json();
-        setPostulacionesFiltradas(data);
+        
+        // Encontrar el cargo en la lista de cargos
+        const cargo = cargos.find(c => c.id === cargoId);
+        
+        // Enriquecer las postulaciones con información del cargo si no viene del backend
+        const postulacionesEnriquecidas = data.map((p: any) => ({
+          ...p,
+          cargo: p.cargo || cargo // Usar cargo del backend si existe, sino usar el de la lista local
+        }));
+        
+        setPostulacionesFiltradas(postulacionesEnriquecidas);
         setActiveTab("postulaciones");
       }
     } catch (error) {
