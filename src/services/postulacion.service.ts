@@ -29,6 +29,17 @@ class PostulacionService {
   }
 
   /**
+   * Obtener todas las postulaciones de una empresa
+   */
+  async getPostulacionesByEmpresa(
+    empresaId: number
+  ): Promise<PostulacionDetalle[]> {
+    return apiService.get<PostulacionDetalle[]>(
+      `/postulaciones/empresa/${empresaId}`
+    );
+  }
+
+  /**
    * Obtener detalle de una postulación
    */
   async getPostulacionById(id: number): Promise<PostulacionDetalle> {

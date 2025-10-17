@@ -8,13 +8,15 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { empresaService } from "@/services/empresa.service";
 import { cargoService } from "@/services/cargo.service";
+import { postulacionService } from "@/services/postulacion.service";
 import { authService } from "@/services/auth.service";
-import { Empresa, CargoDetalle } from "@/types";
+import { Empresa, CargoDetalle, PostulacionDetalle } from "@/types";
 
 export function useEmpresaDashboard() {
   const router = useRouter();
   const [empresa, setEmpresa] = useState<Empresa | null>(null);
   const [cargos, setCargos] = useState<CargoDetalle[]>([]);
+  const [postulaciones, setPostulaciones] = useState<PostulacionDetalle[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -48,6 +50,17 @@ export function useEmpresaDashboard() {
       const cargosData = await cargoService.getCargosByEmpresa(empresaId);
       console.log("💼 Cargos de la empresa:", cargosData.length);
       setCargos(cargosData);
+
+      // Cargar todas las postulaciones de la empresa
+      try {
+        const postulacionesData = await postulacionService.getPostulacionesByEmpresa(empresaId);
+        console.log("📋 Postulaciones de la empresa:", postulacionesData.length);
+        setPostulaciones(postulacionesData);
+      } catch (postErr: any) {
+        // Si el endpoint no existe aún, simplemente no cargar postulaciones
+        console.warn("⚠️ No se pudieron cargar postulaciones de empresa:", postErr.message);
+        setPostulaciones([]);
+      }
     } catch (err: any) {
       console.error("❌ Error cargando datos:", err);
       setError(err.message || "Error al cargar los datos");
@@ -125,6 +138,7 @@ export function useEmpresaDashboard() {
   return {
     empresa,
     cargos,
+    postulaciones,
     loading,
     error,
     refresh,
