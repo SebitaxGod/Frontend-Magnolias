@@ -466,14 +466,25 @@ export default function DashboardEmpresaPage() {
                           <Clock size={16} />
                           {cargo.tipoContrato}
                         </div>
-                        <div className="flex items-center gap-1">
+                        <button
+                          onClick={() => fetchPostulacionesByCargo(cargo.id)}
+                          className="flex items-center gap-1 hover:text-blue-600 transition-colors cursor-pointer"
+                          title="Ver postulaciones"
+                        >
                           <Users size={16} />
                           {cargo._count?.postulaciones || 0} postulaciones
-                        </div>
+                        </button>
                       </div>
                     </div>
 
                     <div className="flex gap-2 ml-4">
+                      <button
+                        onClick={() => fetchPostulacionesByCargo(cargo.id)}
+                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
+                        title="Ver Postulaciones"
+                      >
+                        <Users size={20} />
+                      </button>
                       <button
                         onClick={() => handleDeleteCargo(cargo.id)}
                         className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-all"
